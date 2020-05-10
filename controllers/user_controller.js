@@ -38,3 +38,9 @@ module.exports.createSession=function(req,res){
 module.exports.profile=function(req,res){
     return res.render('profile');
 }
+module.exports.signout=function(req,res){
+
+    req.logout();
+    console.log("lol");
+    res.redirect('/user/signin');
+}
