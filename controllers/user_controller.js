@@ -10,6 +10,7 @@ module.exports.signin= function(req,res) {
     return res.render('user-signin');
 }
 const User=require('../models/codial');
+const Posts=require('../models/posts');
 module.exports.signup_action=function(req,res){
 
     console.log("IN LOL");
@@ -33,14 +34,46 @@ module.exports.signup_action=function(req,res){
 }
 
 module.exports.createSession=function(req,res){
-    return res.end('<h1>succesfull</h1>');
+
+
+    return res.redirect('profile');
 }
 module.exports.profile=function(req,res){
-    return res.render('profile');
+    var b=req.user._id;
+
+    Posts.find({user:{$eq:b}},function(err,c){
+        if(err)
+        {
+            console.log("error in displaying posts",err);
+            return;
+        }
+        return res.render('profile',{posts:c});
+
+    })
+    
 }
 module.exports.signout=function(req,res){
 
     req.logout();
     console.log("lol");
     res.redirect('/user/signin');
+}
+module.exports.addposts=function(req,res){
+    Posts.create({
+        content:req.body.posts,
+        user:req.user._id
+    },function(err,posts)
+    {
+       
+        if(err)
+        {
+            console.log("error in creating post",err);
+            return;
+        }
+        console.log("***********",posts);
+       
+        
+        
+    })
+     res.redirect('back');
 }

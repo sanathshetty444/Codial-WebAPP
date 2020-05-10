@@ -6,7 +6,20 @@
 <p><%=user.name%></p>
 <p><%=user.email%></p>
 <h1>Posts</h1>
-<form action="" method="POST">
+<form action="/user/addpost" method="POST">
     <textarea style="display: block; text-align: center; margin-left: 30vw;" name="posts" cols="30" rows="3" placeholder="Your posts goes here"></textarea>
     <button type="submit">ADD</button>
 </form>
+
+<% if(typeof posts != 'undefined') {
+for(let i of posts){%>
+    <div id ="inner" >
+     
+         <%=i.content%> 
+        
+    </div>
+    <br>
+    <br>
+
+        
+    <%} }%> 
