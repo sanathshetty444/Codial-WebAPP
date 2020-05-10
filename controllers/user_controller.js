@@ -38,6 +38,19 @@ module.exports.createSession=function(req,res){
 
     return res.redirect('profile');
 }
+module.exports.signout=function(req,res){
+
+    req.logout();
+    console.log("lol");
+    res.redirect('/user/signin');
+}
+
+
+
+//profile page opertions
+
+
+
 module.exports.profile=function(req,res){
     var b=req.user._id;
 
@@ -52,12 +65,11 @@ module.exports.profile=function(req,res){
     })
     
 }
-module.exports.signout=function(req,res){
 
-    req.logout();
-    console.log("lol");
-    res.redirect('/user/signin');
-}
+
+
+
+
 module.exports.addposts=function(req,res){
     Posts.create({
         content:req.body.posts,
@@ -76,4 +88,16 @@ module.exports.addposts=function(req,res){
         
     })
      res.redirect('back');
+}
+
+
+module.exports.populate_user_name_by_user_in_posts=function(req,res){
+    Posts.find({}).populate('user').exec(function(err,posts)
+    {
+        if(err)
+        {
+            console.log("error in poupulated user info by user id in posts",err);
+        }
+        return res.render('profile',{posts:posts});
+    })
 }
