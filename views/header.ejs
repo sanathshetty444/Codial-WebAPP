@@ -1,7 +1,7 @@
-<h1>This is the header of the page</h1>
+<h1>Codial : Home Page</h1>
 
 <%if(locals.user) { %>
-    <%=locals.user.name%>
+   <h3> Currently Logged In : &nbsp <%=locals.user.name%></h3> &nbsp &nbsp <a href="/user/signout">SIGN OUT</a>
+   
     <%}%>
 
-<a href="/user/signout">SIGN OUT</a>

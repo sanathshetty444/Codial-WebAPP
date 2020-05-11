@@ -87,7 +87,7 @@ module.exports.addposts=function(req,res){
         
         
     })
-     res.redirect('back');
+     res.redirect('/user/profile');
 }
 
 
@@ -101,3 +101,43 @@ module.exports.populate_user_name_by_user_in_posts=function(req,res){
         return res.render('profile',{posts:posts});
     })
 }
+
+
+
+
+// comment action controller for the user
+
+const Comment = require('../models/comment');
+
+module.exports.comment=function(req,res){
+    
+   // console.log(req.user._id);
+    Comment.create({
+
+        content:req.body.comment,
+        user:req.user._id,
+        post:req.body.post
+    },function(err,comment){
+        if(err)
+        {
+            console.log("error in making comments",err)
+            return;
+        }
+        console.log("**********",comment);
+
+        Posts.findById(req.body.post,function(err,post){
+
+            if(err){return};
+            post.comments.push(comment);
+            post.save();
+        })
+
+
+
+        
+    })
+
+}
+
+
+

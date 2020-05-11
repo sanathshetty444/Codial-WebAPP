@@ -18,7 +18,8 @@ user_router.post('/create-session',passport.authenticate(
     {failureRedirect:'/user/sign-in'},
 ),user.createSession)
 user_router.get('/signout',user.signout);
-user_router.post('/addpost',user.addposts);
+user_router.post('/addpost',passport.checkAuthenticaton,user.addposts);
+user_router.post('/addcomment',user.comment);
 
 
 module.exports=user_router;
