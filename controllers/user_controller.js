@@ -142,4 +142,22 @@ module.exports.comment=function(req,res){
 }
 
 
+// Deletion of posts
+
+module.exports.postdelete=function(req,res){
+
+    Posts.findById(req.params.id,function(err,post){
+        if(err){console.log("error in deleting post",err);}
+
+        post.remove();
+
+        Comment.deleteMany({post:req.params.id},function(err){
+            return res.redirect('/');
+
+        })
+
+    })
+}
+
+
 

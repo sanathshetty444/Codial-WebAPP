@@ -20,6 +20,7 @@ user_router.post('/create-session',passport.authenticate(
 user_router.get('/signout',user.signout);
 user_router.post('/addpost',passport.checkAuthenticaton,user.addposts);
 user_router.post('/addcomment',user.comment);
+user_router.get('/postdelete/:id',user.postdelete);
 
 
 module.exports=user_router;

@@ -13,6 +13,14 @@
     </form>
 
     <%for (post of posts) {%>
+
+        <% if ((locals.user) && (locals.user.id==post.user.id) ){%>
+        
+            <a href="/user/postdelete/<%=post.id%>">X</a>
+        
+        <%}%>
+
+
         Post by : &nbsp <%=post.user.name%> 
         <h4><%=post.content%> </h4>
         
@@ -28,7 +36,7 @@
             Comment done by : &nbsp <%=comment.user.name%>
         <%}%>
         <br>
-        <h1>-------------------------------------------------------------------------------------------------------------</h1>
+        <h1>------------------------------------------------------------------------</h1>
         <br>
         <br>
 
