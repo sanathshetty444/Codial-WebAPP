@@ -131,11 +131,13 @@ module.exports.comment=function(req,res){
             post.comments.push(comment);
             post.save();
         })
+        return res.redirect('/');
 
 
 
         
     })
+
 
 }
 
