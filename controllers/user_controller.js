@@ -73,7 +73,8 @@ module.exports.profile=function(req,res){
 module.exports.addposts=function(req,res){
     Posts.create({
         content:req.body.posts,
-        user:req.user._id
+        user:req.user._id,
+       
     },function(err,posts)
     {
        
@@ -157,6 +158,29 @@ module.exports.postdelete=function(req,res){
         })
 
     })
+}
+
+
+// comment delete
+
+module.exports.commentdelete=function(req,res){
+
+
+    Comment.findById(req.params.id,function(err,comment){
+
+        let postid=comment.post;
+        
+        Posts.findByIdAndUpdate(postid,{$pull:{comments:req.params.id}},function(err,post){
+
+            console.log(post);
+        });
+
+        comment.remove();
+
+    })
+    
+    
+    return res.redirect('/');
 }
 
 

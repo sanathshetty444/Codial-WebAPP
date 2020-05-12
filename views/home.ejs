@@ -8,7 +8,7 @@
     <form action="/user/addpost" method="POST">
     
         <h2> Add a Post</h2>
-        <textarea cols="30" rows="3" name="post" placeholder="Your post goes here"></textarea>
+        <textarea cols="30" rows="3" name="posts" placeholder="Your post goes here"></textarea>
         <button type="submit">Add</button>
     </form>
 
@@ -31,9 +31,19 @@
             <button type="submit">Add Comment</button>
         </form>
         <%for(comment of post.comments) {%>
+            
+            <% if (locals.user.id==comment.user.id) {%>
+
+                
+        
+                    <a href="/user/commentdelete/<%=comment.id%>">Y</a>
+                
+            <%}%>
+            Comment done by : &nbsp <%=comment.user.name%>
+
             <h4><%=comment.content%></h4>
             
-            Comment done by : &nbsp <%=comment.user.name%>
+           
         <%}%>
         <br>
         <h1>------------------------------------------------------------------------</h1>
