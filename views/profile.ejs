@@ -3,27 +3,51 @@
 <link   rel="stylesheet" type="text/css" href="/css/layout.css">
 <a href="/"><h4>Back To Home Page</h4></a>
 <h1>
-    Codial?Profile Page
+    Codial : Profile Page
 </h1>
-<p><%=user.name%></p>
-<p><%=user.email%></p>
+<p><%=name.name%></p>
+<p><%=name.email%></p>
 
-<h1>Posts</h1>
-<form action="/user/addpost" method="POST">
-    <textarea style="display: block; text-align: center; margin-left: 30vw;" name="posts" cols="30" rows="3" placeholder="Your posts goes here"></textarea>
-    <button type="submit">ADD</button>
-</form>
 
-<% if(typeof posts != 'undefined') {
-for(let i of posts){%>
-    <div id ="inner" >
-     
-         <%=i.content%> 
-         
+<% if (locals.user.id==name.id){%>
+    <form action="/user/addpost" method="POST">
         
-    </div>
+        <h2> Add a Post</h2>
+        <textarea cols="30" rows="3" name="posts" placeholder="Your post goes here"></textarea>
+        <button type="submit">Add</button>
+    </form>
     <br>
     <br>
 
-        
- <%} }%> 
+
+    <form action="/user/update/<%=name.id%>" method="POST">
+        <input name="name" placeholder="name" >
+        <input name="email" placeholder="email">
+        <button type="submit">Update</button>
+    
+    </form>
+<%}%>
+<!--  View posts by the profile-->
+
+
+<% for (post of posts){%>
+
+    <%=post.content%>
+    <br>
+    <h4>Comments</h4>
+    <% for (comment of post.comments){%>
+        <%=comment.content%>
+        <br>
+     <%} %>
+     <h1>-------------------------------------------------------</h1>
+     <br>
+     <br>
+
+
+    
+    
+    
+    
+    
+<%} %>
+

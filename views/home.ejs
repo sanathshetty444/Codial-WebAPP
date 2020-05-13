@@ -39,7 +39,7 @@
                     <a href="/user/commentdelete/<%=comment.id%>">Y</a>
                 
             <%}%>
-            Comment done by : &nbsp <%=comment.user.name%>
+            Comment done by : &nbsp <a href="/user/profile/<%=comment.user.id%>"> <%=comment.user.name%></a>
 
             <h4><%=comment.content%></h4>
             

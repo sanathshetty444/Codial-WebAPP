@@ -4,7 +4,7 @@ module.exports.signup=function(req,res){
 module.exports.signin= function(req,res) {
     //console.log(req.cookies.codial);
     if(req.isAuthenticated()){
-        return res.redirect('/user/profile')
+        return res.redirect('/')
     }
     
     return res.render('user-signin');
@@ -54,15 +54,28 @@ module.exports.signout=function(req,res){
 module.exports.profile=function(req,res){
     var b=req.user._id;
 
-    Posts.find({user:{$eq:b}},function(err,c){
-        if(err)
-        {
-            console.log("error in displaying posts",err);
-            return;
-        }
-        return res.render('profile',{posts:c});
+    User.findById(req.params.id,function(err,user){
+       
+    
 
-    })
+        Posts.find({user:{$eq:req.params.id}}).populate('user')
+            .populate({
+                path:'comments',
+                populate:{
+                    path:'user'
+                }
+            }).exec(function(err,posts)
+            {
+                return res.render('profile',{posts:posts,name:user});
+
+            })
+
+
+
+            
+
+        })
+    
     
 }
 
@@ -88,7 +101,7 @@ module.exports.addposts=function(req,res){
         
         
     })
-     res.redirect('/user/profile');
+     res.redirect('/');
 }
 
 
@@ -183,5 +196,14 @@ module.exports.commentdelete=function(req,res){
     return res.redirect('/');
 }
 
+// update info of the user
+
+module.exports.update=function(req,res)
+{
+    User.findByIdAndUpdate(req.params.id,{name:req.body.name,email:req.body.email},function(err,user){
+        console.log(user);
+    })
+    return res.redirect('/');
+}
 
 
