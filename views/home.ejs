@@ -1,55 +1,20 @@
+
 <% if (!locals.user) {%>
     <h1> Be A Part Of Codial:The Discussion Forum</h1>
     <a href="/user/signup" >  <h4>Sign Up</h4> </a>
     <h2> Already A Member :</h2> &nbsp <a href="/user/signin"> <h4>Sign In</h4></a>
-
+    <link rel="stylesheet" href="/css/home.css">
 <%} else {%>
+    <link rel="stylesheet" href="/css/home1.css">
 
-    <form action="/user/addpost" method="POST">
-    
-        <h2> Add a Post</h2>
-        <textarea cols="30" rows="3" name="posts" placeholder="Your post goes here"></textarea>
-        <button type="submit">Add</button>
-    </form>
-
-    <%for (post of posts) {%>
-
-        <% if ((locals.user) && (locals.user.id==post.user.id) ){%>
-        
-            <a href="/user/postdelete/<%=post.id%>">X</a>
-        
-        <%}%>
+    <%-include('post_home');%>
 
 
-        Post by : &nbsp <%=post.user.name%> 
-        <h4><%=post.content%> </h4>
-        
-        
-        <form action="/user/addcomment" method="POST">
-            <input type="text" name="comment" placeholder="Your comment goes here"> 
-            <input type="hidden" name="post" value=<%=post._id%> >
-            <button type="submit">Add Comment</button>
-        </form>
-        <%for(comment of post.comments) {%>
-            
-            <% if (locals.user.id==comment.user.id) {%>
 
-                
-        
-                    <a href="/user/commentdelete/<%=comment.id%>">Y</a>
-                
-            <%}%>
-            Comment done by : &nbsp <a href="/user/profile/<%=comment.user.id%>"> <%=comment.user.name%></a>
 
-            <h4><%=comment.content%></h4>
-            
-           
-        <%}%>
-        <br>
-        <h1>------------------------------------------------------------------------</h1>
-        <br>
-        <br>
+
 
 
     
-<%} }%>
+    
+<%} %>

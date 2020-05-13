@@ -1,7 +1,10 @@
+
+
 <h1>Codial : Home Page</h1>
 
-<%if(locals.user) { %>
-   <h3> Currently Logged In : &nbsp <a href="/user/profile"> <%=locals.user.name%> </a> </h3> &nbsp &nbsp <a href="/user/signout">SIGN OUT</a>
-   
-    <%}%>
-
+<div id="header">
+   <%if(locals.user) { %>
+      <h3 > Currently Logged In : &nbsp <a href="/user/profile/<%=locals.user.id%>"> <%=locals.user.name%> </a> </h3> &nbsp &nbsp <a href="/user/signout">SIGN OUT</a>
+      
+   <%}%>
+</div>

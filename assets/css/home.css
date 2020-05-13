@@ -1,0 +1,12 @@
+body {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: hard-light;
+  color: white;
+  background-image: url("https://previews.123rf.com/images/redfig/redfig0901/redfig090100046/4162204-flower-for-a-background-webpage-wall-drop.jpg"); }
+  body a {
+    color: white; }
+  body a:hover {
+    transition: all 1s ease-in-out;
+    font-size: larger;
+    overflow: visible; }

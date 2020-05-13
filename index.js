@@ -9,13 +9,14 @@ const cookieParser=require('cookie-parser');
 
 
 
-
 //used for session cookie and for authentication
 const session = require('express-session');
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-strategy');
 const sassMiddleware=require('node-sass-middleware');
 const Mongostore=require('connect-mongo')(session);
+const flash=require('connect-flash');
+const flashmiddleware=require('./config/middlewareflash');
 app.use(sassMiddleware({
     src:'./assets/scss',
     dest:'./assets/css',
@@ -70,6 +71,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app. use(passport.setAuthenticatedUser);
+app.use(flash());
+app.use(flashmiddleware.setFlash);
 
 
 app.use('/',require('./routes'));

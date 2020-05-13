@@ -35,8 +35,10 @@ module.exports.signup_action=function(req,res){
 
 module.exports.createSession=function(req,res){
 
+    req.flash('success','logged in succesfully');
 
-    return res.redirect('profile');
+
+    return res.redirect('/');
 }
 module.exports.signout=function(req,res){
 
@@ -51,30 +53,30 @@ module.exports.signout=function(req,res){
 
 
 
-module.exports.profile=function(req,res){
+module.exports.profile= async function(req,res){
     var b=req.user._id;
 
-    User.findById(req.params.id,function(err,user){
+    let user= await User.findById(req.params.id);
        
     
 
-        Posts.find({user:{$eq:req.params.id}}).populate('user')
+    let posts = await Posts.find({user:{$eq:req.params.id}}).populate('user')
             .populate({
                 path:'comments',
                 populate:{
                     path:'user'
                 }
-            }).exec(function(err,posts)
-            {
-                return res.render('profile',{posts:posts,name:user});
-
             })
+        
+     return res.render('profile',{posts:posts,name:user});
+
+            
 
 
 
             
 
-        })
+        
     
     
 }
