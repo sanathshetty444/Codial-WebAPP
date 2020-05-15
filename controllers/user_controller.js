@@ -6,7 +6,8 @@ module.exports.signin= function(req,res) {
     if(req.isAuthenticated()){
         return res.redirect('/')
     }
-    
+   
+
     return res.render('user-signin');
 }
 const User=require('../models/codial');
@@ -43,6 +44,7 @@ module.exports.createSession=function(req,res){
 module.exports.signout=function(req,res){
 
     req.logout();
+    req.flash('success','logged out succesfully');
     console.log("lol");
     res.redirect('/user/signin');
 }
@@ -85,25 +87,37 @@ module.exports.profile= async function(req,res){
 
 
 
-module.exports.addposts=function(req,res){
-    Posts.create({
+module.exports.addposts= async function(req,res){
+   try
+   {
+       let post=  await Posts.create({
         content:req.body.posts,
-        user:req.user._id,
+        user:req.user._id
        
-    },function(err,posts)
-    {
+        });
+       let user= await User.findById(req.user.id);
+       console.log(user.name);
+
        
-        if(err)
-        {
-            console.log("error in creating post",err);
-            return;
+        if (req.xhr){
+            return res.status(200).json({
+                data: {
+                    post: post,
+                    user:user.name
+                },
+                message: "Post created!"
+            });
         }
-        console.log("***********",posts);
-       
         
-        
-    })
-     res.redirect('/');
+
+        req.flash('success','Post added successfully');
+
+        res.redirect('/');
+   }
+   catch(err){
+    console.log("error in creating post",err);
+    return res.redirect('back')
+   }
 }
 
 
@@ -125,77 +139,122 @@ module.exports.populate_user_name_by_user_in_posts=function(req,res){
 
 const Comment = require('../models/comment');
 
-module.exports.comment=function(req,res){
+module.exports.comment= async function(req,res){
     
    // console.log(req.user._id);
-    Comment.create({
+   try
+   {
+        let comment=await Comment.create({
 
-        content:req.body.comment,
-        user:req.user._id,
-        post:req.body.post
-    },function(err,comment){
-        if(err)
-        {
-            console.log("error in making comments",err)
-            return;
+            content:req.body.comment,
+            user:req.user._id,
+            post:req.body.post
+        });
+
+        let post=await Posts.findById(req.body.post,function(err,post){
+
+                if(err){return};
+                post.comments.push(comment);
+                post.save();
+            });
+        let user=await User.findById(req.user.id);
+        console.log(user);
+
+
+        if(req.xhr){
+            return res.status(200).json({
+                 data:{
+                        comment:comment,
+                        user:user.name
+                    },
+                    message:"commented"
+            });
         }
-        console.log("**********",comment);
-
-        Posts.findById(req.body.post,function(err,post){
-
-            if(err){return};
-            post.comments.push(comment);
-            post.save();
-        })
-        return res.redirect('/');
 
 
 
-        
-    })
+            req.flash('success','Comment added sccessfully');
 
+            return res.redirect('/');
+     }
+     catch(err){
+         console.log("error in adding comments",err);
 
+     }
 }
 
 
 // Deletion of posts
 
-module.exports.postdelete=function(req,res){
+module.exports.postdelete=async function(req,res){
 
-    Posts.findById(req.params.id,function(err,post){
-        if(err){console.log("error in deleting post",err);}
+    try
+    {   
+        let post=await Posts.findById(req.params.id)
+
 
         post.remove();
 
-        Comment.deleteMany({post:req.params.id},function(err){
-            return res.redirect('/');
+        let comment =await Comment.deleteMany({post:req.params.id});
 
-        })
+        if(req.xhr){
+            return res.status(200).json({
+                data:{
+                    post:req.params.id
+                },
+                message:"post deleted"
+            })
+        }
 
-    })
+        
+        
+        req.flash('success','Post deleted successfully');
+        return res.redirect('/');
+    }
+    catch(err)
+    {
+        console.log("error in deleting posts",err);
+    }
+
 }
 
 
 // comment delete
 
-module.exports.commentdelete=function(req,res){
+module.exports.commentdelete=async function(req,res){
 
-
-    Comment.findById(req.params.id,function(err,comment){
+    try
+    {
+        let comment= await Comment.findById(req.params.id)
+        
 
         let postid=comment.post;
-        
-        Posts.findByIdAndUpdate(postid,{$pull:{comments:req.params.id}},function(err,post){
-
-            console.log(post);
-        });
+            
+        let post=await Posts.findByIdAndUpdate(postid,{$pull:{comments:req.params.id}});
 
         comment.remove();
 
-    })
-    
-    
-    return res.redirect('/');
+        if(req.xhr){
+            return res.status(200).json({
+                data:{
+                    comment:req.params.id
+                },
+                message:"post deleted"
+            })
+        }
+        
+
+        
+        req.flash('success','Comment deleted succesfully');
+
+        
+        
+        return res.redirect('/');
+    }
+    catch(err)
+    {
+        console.log("error found in deleting comments",err);
+    }
 }
 
 // update info of the user
@@ -205,6 +264,8 @@ module.exports.update=function(req,res)
     User.findByIdAndUpdate(req.params.id,{name:req.body.name,email:req.body.email},function(err,user){
         console.log(user);
     })
+    req.flash('success','updated succesfully');
+
     return res.redirect('/');
 }
 

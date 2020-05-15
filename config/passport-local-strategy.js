@@ -4,9 +4,10 @@ const User=require('../models/codial');
 
 //authntication using passport
 passport.use(new LocalStrategy({
-    usernameField:'email'
+    usernameField:'email',
+    passReqToCallback:true
 },
-function(email,password,done){
+function(req,email,password,done){
     //finad a user and establish identity
     User.findOne({email:email},function(err,user){
         if(err){
@@ -15,6 +16,7 @@ function(email,password,done){
         }
         if(!user || user.password!=password)
         {
+            req.flash('error','Invalid email-id or password');
             console.log('invalid username password');
             return done(null,false);
         }

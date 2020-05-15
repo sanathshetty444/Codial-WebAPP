@@ -1,0 +1,12 @@
+<li id="comment-<%=comment.id%>">
+    <% if (locals.user.id==comment.user.id) {%>
+
+        
+
+            <a class="delete-comment-button" href="/user/commentdelete/<%=comment.id%>">Y</a>
+        
+    <%}%>
+    Comment done by : &nbsp <a href="/user/profile/<%=comment.user.id%>"> <%=comment.user.name%></a>
+
+    <h4><%=comment.content%></h4>
+</li>

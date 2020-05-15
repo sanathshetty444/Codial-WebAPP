@@ -15,7 +15,7 @@ user_router.post('/signup-action',user.signup_action);
 //use passpor as amiddleware to authenticate
 user_router.post('/create-session',passport.authenticate(
     'local',
-    {failureRedirect:'/user/sign-in'},
+    {failureRedirect:'/user/signup'},
 ),user.createSession)
 user_router.get('/signout',user.signout);
 user_router.post('/addpost',passport.checkAuthenticaton,user.addposts);
