@@ -138,6 +138,7 @@ module.exports.populate_user_name_by_user_in_posts=function(req,res){
 // comment action controller for the user
 
 const Comment = require('../models/comment');
+const commentmailer=require('../mailers/comments');
 
 module.exports.comment= async function(req,res){
     
@@ -158,7 +159,11 @@ module.exports.comment= async function(req,res){
                 post.save();
             });
         let user=await User.findById(req.user.id);
-        console.log(user);
+        //console.log(user);
+        comment_email=await Comment.findById(comment.id).populate('user');
+        //console.log("***********",comment_email);
+        commentmailer.newComment(comment_email);
+
 
 
         if(req.xhr){
@@ -258,15 +263,46 @@ module.exports.commentdelete=async function(req,res){
 }
 
 // update info of the user
-
-module.exports.update=function(req,res)
+const fs = require('fs');
+const path=require('path');
+module.exports.update=async function(req,res)
 {
-    User.findByIdAndUpdate(req.params.id,{name:req.body.name,email:req.body.email},function(err,user){
-        console.log(user);
-    })
-    req.flash('success','updated succesfully');
+    try{
 
-    return res.redirect('/');
+    
+        let user=await User.findById(req.params.id);
+        console.log(user);
+        User.updateAvatar(req,res,function(){
+            user.name=req.body.name;
+            user.email=req.body.email;
+            
+
+            if(req.file){
+                if(user.avatar!=null && fs.existsSync(path.join(__dirname,"..",user.avatar))){
+                    console.log("yes lol");
+                    console.log(__dirname);
+                    fs.unlinkSync(path.join(__dirname,"..",user.avatar));
+                }
+
+
+                user.avatar=User.avatarPath+'/'+req.file.filename;
+            }
+            user.save();
+            req.flash('success','updated succesfully');
+
+            return res.redirect('/');
+
+        })
+
+
+
+
+        
+    }
+    catch(err)
+    {
+        console.log("error in updation",err);
+    }
 }
 
 

@@ -5,7 +5,7 @@ const User=require('../models/codial');
 //authntication using passport
 passport.use(new LocalStrategy({
     usernameField:'email',
-    passReqToCallback:true
+    passReqToCallback:true// this gives an additional parameter i.e request
 },
 function(req,email,password,done){
     //finad a user and establish identity

@@ -5,10 +5,11 @@ const Posts=require('../models/posts');
 
 
 
-module.exports.home=function(req,res){
+module.exports.home=async function(req,res){
 
    
-   Posts.find({})
+   let posts=await Posts.find({})
+   .sort('-createdAt')
    .populate('user')
    .populate({
       path:'comments',
@@ -16,12 +17,6 @@ module.exports.home=function(req,res){
          path:'user'
       }
    })
-   .exec(function(err,posts)
-   {
-       if(err)
-       {
-           console.log("error in poupulated user info by user id in posts",err);
-       }
+   
        return res.render('home',{posts:posts});
-   })
 }

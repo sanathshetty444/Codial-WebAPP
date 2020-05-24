@@ -5,5 +5,6 @@ const home_controller=require('../controllers/home_controller');
 router.get('/',home_controller.home);
 
 router.use('/user',require('./user_routes'));
+router.use('/api',require('./api/index'));
 //router.use('/name',require('./user_routes'));
 module.exports=router;

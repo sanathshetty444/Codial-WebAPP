@@ -13,6 +13,8 @@ const cookieParser=require('cookie-parser');
 const session = require('express-session');
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-strategy');
+const passportJWT=require('./config/pssport-jwt');
+const passportOauth=require('./config/passport-google-oauth');
 const sassMiddleware=require('node-sass-middleware');
 const Mongostore=require('connect-mongo')(session);
 const flash=require('connect-flash');
@@ -70,10 +72,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app. use(passport.setAuthenticatedUser);
+app.use(passport.setAuthenticatedUser);
 app.use(flash());
 app.use(flashmiddleware.setFlash);
-
+app.use('/uploads',express.static(__dirname+'/uploads'));
 
 app.use('/',require('./routes'));
 

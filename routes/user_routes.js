@@ -24,4 +24,7 @@ user_router.get('/postdelete/:id',user.postdelete);
 user_router.get('/commentdelete/:id',user.commentdelete);
 user_router.post('/update/:id',user.update);
 
+user_router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}));
+user_router.get('/auth/google/callback',passport.authenticate('google',{failureRedirect:'/user/signin'}),user.createSession)
+
 module.exports=user_router;
